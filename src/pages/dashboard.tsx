@@ -1,14 +1,17 @@
-import React from 'react';
 
+import { Outlet } from 'react-router-dom';
+import Sidebar from '../layouts/Sidebar'
 const dashboard = () => {
-  return <div>
-      <div>
-          <div>
+    return <div>
+        <div>
+            <Sidebar />
 
-          </div>
-      </div>
-  </div>
-  ;
+            <div>
+                <Outlet />
+            </div>
+        </div>
+    </div>
+        ;
 };
 
 export default dashboard;

@@ -1,6 +1,9 @@
+import { FC } from "react";
 
-const Login = () => {
-  return <div >qsdqsd</div>;
+const Login: FC  = () => {
+  return <div >
+      
+  </div>;
 };
 
 export default Login;
