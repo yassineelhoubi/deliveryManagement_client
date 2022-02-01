@@ -1,15 +1,20 @@
 
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../layouts/Sidebar'
+import WorkSpace from '../layouts/WorkSpace'
 const dashboard = () => {
-    return <div>
-        <div>
-            <Sidebar />
+    return <div className="bg-gray-100 font-family-karla flex">
 
-            <div>
-                <Outlet />
-            </div>
-        </div>
+        <>
+            <Sidebar />
+        </>
+        <>
+            <WorkSpace >
+                <Outlet/>
+            </WorkSpace>
+        </>
+
+
     </div>
         ;
 };
