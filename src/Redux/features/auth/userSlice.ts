@@ -21,7 +21,6 @@ export const userSlice = createSlice({
             state.token = action.payload.token;
             state.role = action.payload.role;
             state.email = action.payload.email;
-            
         },
         clearData: (state) => {
             state.token = '';

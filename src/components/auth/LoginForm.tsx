@@ -7,19 +7,16 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useFormik, FormikProps } from "formik"
-import { useEffect, useState } from 'react';
-import { useDispatch } from "react-redux"
-import { useSelector } from 'react-redux';
+import { useFormik } from "formik"
+import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../Redux/store";
 import * as Yup from "yup"
 import { adminLogin } from '../../Redux/services/adminLogin';
-import { userData, clearData } from '../../Redux/features/auth/userSlice';
-
+import { userData } from '../../Redux/features/auth/userSlice';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 
 function Copyright(props: any) {
@@ -38,17 +35,12 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 const LoginForm: React.FC = () => {
-    const token = useSelector(
-        (state: RootState) => state.user.token
-      );
+    // const role = useLocation().pathname
+    let {acteur} = useParams()
+    let navigate = useNavigate();
 
 
     let dispatch = useDispatch()
-    // interface FormValues {
-    //     email: string;
-    //     password: string;
-    // }
-
 
     const formik = useFormik({
         initialValues: {
@@ -56,27 +48,28 @@ const LoginForm: React.FC = () => {
             password: '',
         },
         validationSchema: Yup.object({
-
             password: Yup.string().min(5, 'Must be 5 characters or more').required('Required'),
             email: Yup.string().email('Invalid email address').required('Required')
         }),
         enableReinitialize: true,
         onSubmit: async (values: any) => {
-            await adminLogin(values).then((res) => dispatch(userData({
-                token: res.data.token
-            }))
-            )
-            // dispatch(clearData())
-
-
-
+            if(acteur =="admin"){
+                await adminLogin(values).then((res) =>{
+                    navigate("../dashboard/admin/manageManagers/read", { replace: true });
+                    dispatch(userData({
+                        token: res.data.token
+                    }))
+                } 
+                )
+            }
+            
         }
     }
+
     )
 
     return (
         <ThemeProvider theme={theme}>
-            {token}
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
