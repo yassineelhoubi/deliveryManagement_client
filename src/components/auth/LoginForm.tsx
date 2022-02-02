@@ -12,8 +12,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useFormik, FormikProps } from "formik"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch } from "react-redux"
+import { useSelector } from 'react-redux';
+import { RootState } from "../../Redux/store";
 import * as Yup from "yup"
+import { adminLogin } from '../../Redux/services/adminLogin';
+import { userData, clearData } from '../../Redux/features/auth/userSlice';
 
 
 
@@ -33,43 +38,36 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 const LoginForm: React.FC = () => {
-    interface FormValues {
-        email: string;
-        password: string;
-    }
-    //   const [azaz , serfdfd] = useState<string>()
+    const token = useSelector(
+        (state: RootState) => state.user.token
+      );
 
-    // const formik: FormikProps<FormValues> = useFormik<FormValues>({
-    //     initialValues: {
-    //         email: "",
-    //         password: ""
-    //     }
+
+    let dispatch = useDispatch()
+    // interface FormValues {
+    //     email: string;
+    //     password: string;
     // }
 
-    // );
 
-    // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    //     event.preventDefault();
-    //     const data = new FormData(event.currentTarget);
-    //     // eslint-disable-next-line no-console
-    //     console.log({
-    //         email: data.get('email'),
-    //         password: data.get('password'),
-    //     });
-    // };
     const formik = useFormik({
         initialValues: {
             email: '',
-            Password: '',
+            password: '',
         },
         validationSchema: Yup.object({
 
-            Password: Yup.string().min(5, 'Must be 5 characters or more').required('Required'),
+            password: Yup.string().min(5, 'Must be 5 characters or more').required('Required'),
             email: Yup.string().email('Invalid email address').required('Required')
         }),
         enableReinitialize: true,
-        onSubmit: (values: any) => {
-            console.log(values);
+        onSubmit: async (values: any) => {
+            await adminLogin(values).then((res) => dispatch(userData({
+                token: res.data.token
+            }))
+            )
+            // dispatch(clearData())
+
 
 
         }
@@ -78,6 +76,7 @@ const LoginForm: React.FC = () => {
 
     return (
         <ThemeProvider theme={theme}>
+            {token}
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -116,10 +115,10 @@ const LoginForm: React.FC = () => {
                             label="Password"
                             type="password"
                             id="password"
-                            {...formik.getFieldProps('Password')}
+                            {...formik.getFieldProps('password')}
                             autoComplete="current-password"
                         />
-                        {formik.touched.Password && formik.errors.Password ? <div className="text-red-400 ">{formik.errors.Password}</div> : null}
+                        {formik.touched.password && formik.errors.password ? <div className="text-red-400 ">{formik.errors.password}</div> : null}
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
                             label="Remember me"
