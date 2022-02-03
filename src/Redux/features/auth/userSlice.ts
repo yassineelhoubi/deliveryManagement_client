@@ -9,7 +9,6 @@ interface User {
 const initialState: User = {
     token: '',
     role: '',
-    email: '',
     username:''
 };
 
@@ -20,12 +19,12 @@ export const userSlice = createSlice({
         userData: (state, action: PayloadAction<User>) => {
             state.token = action.payload.token;
             state.role = action.payload.role;
-            state.email = action.payload.email;
+            state.username = action.payload.username;
         },
         clearData: (state) => {
             state.token = '';
             state.role = '';
-            state.email = '';
+            state.username = '';
         }
     }
 })

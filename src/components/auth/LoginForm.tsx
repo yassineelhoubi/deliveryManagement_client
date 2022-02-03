@@ -14,7 +14,7 @@ import { useFormik } from "formik"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../Redux/store";
 import * as Yup from "yup"
-import { adminLogin } from '../../Redux/services/adminLogin';
+import { login } from '../../Redux/services/login';
 import { userData } from '../../Redux/features/auth/userSlice';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
@@ -36,7 +36,7 @@ const theme = createTheme();
 
 const LoginForm: React.FC = () => {
     // const role = useLocation().pathname
-    let {acteur} = useParams()
+    let { actor } = useParams()
     let navigate = useNavigate();
 
 
@@ -53,16 +53,36 @@ const LoginForm: React.FC = () => {
         }),
         enableReinitialize: true,
         onSubmit: async (values: any) => {
-            if(acteur =="admin"){
-                await adminLogin(values).then((res) =>{
+            //actor from param
+            values.role = actor
+
+            await login(values).then((res) => {
+                const role = res?.data?.doc?.role
+                if (!role) {
+                    // isAdmin
                     navigate("../dashboard/admin/manageManagers/read", { replace: true });
-                    dispatch(userData({
-                        token: res.data.token
-                    }))
-                } 
-                )
+
+                } else if (role == "MANAGER") {
+                    console.log("MANAGER")
+
+                } else if (role == "DELIVERY_MANAGER") {
+                    console.log("DELIVERY_MANAGER")
+
+                } else if (role == "DRIVER") {
+                    console.log("DRIVER")
+
+                }
+                dispatch(userData({
+                    token: res.data.token,
+                    role: role ? role : "ADMIN",
+
+                }))
             }
-            
+            ).catch((err) => {
+                console.log(err)
+            })
+
+
         }
     }
 
