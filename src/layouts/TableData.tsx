@@ -9,68 +9,27 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 interface Column {
-  id: 'name' | 'code' | 'population' | 'size' | 'density';
+  id: 'name' | 'code' | 'test';
   label: string;
 
 }
 
 const columns: readonly Column[] = [
   { id: 'name', label: 'Name' },
-  { id: 'code', label: 'ISO\u00a0Code',  },
-  {
-    id: 'population',
-    label: 'Population',
-  },
-  {
-    id: 'size',
-    label: 'Size\u00a0(km\u00b2)',
-  },
-  {
-    id: 'density',
-    label: 'Density',
-  },
+  { id: 'code', label: 'ISO\u00a0Code', },
 ];
 
-interface Data {
-  name: string;
-  code: string;
-  population: number;
-  size: number;
-  density: number;
+interface data {
+  name?: string;
+  code?: string;
+  test?: string;
+
 }
 
-function createData(
-  name: string,
-  code: string,
-  population: number,
-  size: number,
-): Data {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-const test = [
-  { name: 'test', code: 'code', population: 1, size: 2 },
-  { name: 'yassine', code: 'test', population: 5, size: 5 }
+const rows: data[] = [
+  { name: 'test', code: 'code' },
+  { name: 'yassine', code: 'qsd' }
 ]
-
-const rows = test.map((e) => createData(e.name, e.code, e.population, e.size))
-// const rows = [
-//   createData('India', 'IN', 1324171354, 3287263),
-//   createData('China', 'CN', 1403500365, 9596961),
-//   createData('Italy', 'IT', 60483973, 301340),
-//   createData('United States', 'US', 327167434, 9833520),
-//   createData('Canada', 'CA', 37602103, 9984670),
-//   createData('Australia', 'AU', 25475400, 7692024),
-//   createData('Germany', 'DE', 83019200, 357578),
-//   createData('Ireland', 'IE', 4857000, 70273),
-//   createData('Mexico', 'MX', 126577691, 1972550),
-//   createData('Japan', 'JP', 126317000, 377973),
-//   createData('France', 'FR', 67022000, 640679),
-//   createData('United Kingdom', 'GB', 67545757, 242495),
-//   createData('Russia', 'RU', 146793744, 17098246),
-//   createData('Nigeria', 'NG', 200962417, 923768),
-//   createData('Brazil', 'BR', 210147125, 8515767),
-// ];
 
 const TableData: React.FC = () => {
   const [page, setPage] = React.useState(0);
@@ -105,7 +64,7 @@ const TableData: React.FC = () => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow hover onClick={()=>console.log(row.code)}  role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableRow hover onClick={() => console.log(row.code)} role="checkbox" tabIndex={-1} key={row.code}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
