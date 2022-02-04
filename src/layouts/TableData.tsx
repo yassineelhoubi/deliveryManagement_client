@@ -8,7 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Column {
   id: 'name' | 'code' | 'test';
@@ -16,24 +16,33 @@ interface Column {
 
 }
 
-const columns: readonly Column[] = [
-  { id: 'name', label: 'Name' },
-  { id: 'code', label: 'ISO\u00a0Code', },
-];
-
 interface data {
   name?: string;
   code?: string;
   test?: string;
-
 }
 
-const rows: data[] = [
-  { name: 'test', code: 'code' },
-  { name: 'yassine', code: 'qsd' }
-]
+interface Props {
+  data: data[]
+  columns: Column[]
+}
 
-const TableData: React.FC = () => {
+
+const TableData: React.FC<Props> = ({ data, columns: headers }) => {
+
+  const columns: readonly Column[] = [
+    { id: 'name', label: 'Name' },
+    { id: 'code', label: 'ISO\u00a0Code', },
+  ];
+  let [dataRows, setDataRows] = useState<data[]>([])
+  let rows: data[] = dataRows.map((row) => row)
+
+  useEffect(() => {
+    {
+      console.log(data, headers);
+      setDataRows(data)
+    }
+  }, [data])
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
