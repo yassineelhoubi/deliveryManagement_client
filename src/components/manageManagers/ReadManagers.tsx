@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material';
 import { FC, useState, useEffect } from 'react';
+import CreateBtn from '../../layouts/buttons/CreateBtn';
 import TableData from '../../layouts/TableData'
 import useFetch from '../../Redux/services/utils/useFetch'
 interface Column {
@@ -22,6 +23,10 @@ const ReadManagers: FC = () => {
     { id: 'updatedAt', label: 'Updated At' },
   ]
   return <div>
+    <div className="mb-6" onClick={() => console.log('e')}>
+
+    <CreateBtn/>
+    </div>
     <Typography variant="h4" gutterBottom component="div">
       Managers
     </Typography>
