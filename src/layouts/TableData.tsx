@@ -8,18 +8,20 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 
 interface Column {
-  id: 'name' | 'code' | 'test';
+  id: 'username' | 'email' | 'createdAt' | 'updatedAt';
   label: string;
 
 }
 
 interface data {
-  name?: string;
-  code?: string;
-  test?: string;
+  _id: string;
+  username?: string;
+  email?: string;
+  updatedAt?: string;
+  createdAt?: string;
 }
 
 interface Props {
@@ -29,20 +31,11 @@ interface Props {
 
 
 const TableData: React.FC<Props> = ({ data, columns: headers }) => {
-
-  const columns: readonly Column[] = [
-    { id: 'name', label: 'Name' },
-    { id: 'code', label: 'ISO\u00a0Code', },
-  ];
-  let [dataRows, setDataRows] = useState<data[]>([])
-  let rows: data[] = dataRows.map((row) => row)
-
-  useEffect(() => {
-    {
-      console.log(data, headers);
-      setDataRows(data)
-    }
-  }, [data])
+  // columns => table headers
+  const columns: readonly Column[] = headers.map(e => e);
+  // rows => data
+  let rows: data[] = data.map((row) => row)
+  // paginationation
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -75,7 +68,7 @@ const TableData: React.FC<Props> = ({ data, columns: headers }) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow hover onClick={() => console.log(row.code)} role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableRow hover onClick={() => console.log(row._id)} role="checkbox" tabIndex={-1} key={row._id}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
