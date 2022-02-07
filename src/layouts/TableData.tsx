@@ -12,6 +12,7 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteUserDialog from './dialogs/DeleteUserDialog';
 
 
 
@@ -53,8 +54,19 @@ const TableData: React.FC<Props> = ({ data, columns: headers }) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+  
+  // MODAL STATE
+  const [open, setOpen] = useState(false)
+  // GET MANAGER ID TO PASS IN DELETE MODAL
+  const [managerId , setManagerId] = useState('')
+  
+  const openDeleteModal = (id:string) =>{
+    console.log(id)
+    setManagerId(id)
+    setOpen(!open)
+  }
 
-  return (
+  return (<>
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
@@ -81,10 +93,10 @@ const TableData: React.FC<Props> = ({ data, columns: headers }) => {
                         <TableCell key={column.id}   >
                           {column.id == "actions" ?
                             <>
-                              <Button onClick={() => console.log(row._id)} variant="outlined" >
+                              <Button onClick={()=>openDeleteModal(row._id)} variant="outlined" >
                                 <DeleteIcon />
                               </Button>
-                              <Button onClick={() => console.log(row._id)} variant="outlined" >
+                              <Button  variant="outlined" >
                                 <EditIcon />
                               </Button>
                             </> : value}
@@ -106,7 +118,9 @@ const TableData: React.FC<Props> = ({ data, columns: headers }) => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-    </Paper>
+    </Paper >
+    {  <DeleteUserDialog setOpen={setOpen} open={open} managerId={managerId} />}
+    </>
   );
 };
 
