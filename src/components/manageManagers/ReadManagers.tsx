@@ -4,7 +4,7 @@ import CreateBtn from '../../layouts/buttons/CreateBtn';
 import TableData from '../../layouts/TableData'
 import useFetch from '../../Redux/services/utils/useFetch'
 interface Column {
-  id: 'username' | 'email' | 'createdAt' | 'updatedAt';
+  id: 'username' | 'email' | 'createdAt' | 'updatedAt' | 'actions';
   label: string;
 }
 
@@ -21,11 +21,12 @@ const ReadManagers: FC = () => {
     { id: 'email', label: 'Email' },
     { id: 'createdAt', label: 'Created At' },
     { id: 'updatedAt', label: 'Updated At' },
+    { id: 'actions', label: 'actions' },
   ]
   return <div>
     <div className="mb-6" onClick={() => console.log('e')}>
 
-    <CreateBtn/>
+      <CreateBtn />
     </div>
     <Typography variant="h4" gutterBottom component="div">
       Managers

@@ -8,10 +8,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import {  useState } from 'react';
+import { useState } from 'react';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+
+
 
 interface Column {
-  id: 'username' | 'email' | 'createdAt' | 'updatedAt';
+  id: 'username' | 'email' | 'createdAt' | 'updatedAt' | 'actions';
   label: string;
 
 }
@@ -22,6 +27,7 @@ interface data {
   email?: string;
   updatedAt?: string;
   createdAt?: string;
+  actions?: string;
 }
 
 interface Props {
@@ -68,12 +74,20 @@ const TableData: React.FC<Props> = ({ data, columns: headers }) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow hover onClick={() => console.log(row._id)} role="checkbox" tabIndex={-1} key={row._id}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} >
-                          {value}
+                        <TableCell key={column.id}   >
+                          {column.id == "actions" ?
+                            <>
+                              <Button onClick={() => console.log(row._id)} variant="outlined" >
+                                <DeleteIcon />
+                              </Button>
+                              <Button onClick={() => console.log(row._id)} variant="outlined" >
+                                <EditIcon />
+                              </Button>
+                            </> : value}
                         </TableCell>
                       );
                     })}
