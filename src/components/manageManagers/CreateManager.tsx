@@ -10,7 +10,8 @@ import { RootState } from "../../Redux/store";
 import * as Yup from "yup"
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import CreateBtn from '../../layouts/buttons/CreateBtn';
+import NavigateBtn from '../../layouts/buttons/NavigateBtn';
+// import navigateBtn from '../../layouts/buttons/navigateBtn';
 
 
 const theme = createTheme();
@@ -61,7 +62,7 @@ const CreateManager: React.FC = () => {
 
     <ThemeProvider theme={theme}>
       <div className="mb-6 w-min" onClick={() => redirect()}>
-        <CreateBtn />
+        <NavigateBtn name="Back" />
       </div>
       <Container component="main" maxWidth="xs">
 

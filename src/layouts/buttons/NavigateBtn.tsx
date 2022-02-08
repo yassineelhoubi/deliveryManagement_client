@@ -4,7 +4,6 @@ import ButtonUnstyled, {
   buttonUnstyledClasses,
 } from '@mui/base/ButtonUnstyled';
 import { styled, Theme } from '@mui/system';
-import { Create } from '@mui/icons-material';
 
 const ButtonRoot = React.forwardRef(function ButtonRoot(
   props: React.PropsWithChildren<{}>,
@@ -116,6 +115,6 @@ const SvgButton = React.forwardRef(function SvgButton(
   return <ButtonUnstyled {...props} component={CustomButtonRoot} ref={ref} />;
 });
 
-export default function CreateBtn() {
-  return <SvgButton>Create <Create/></SvgButton>;
+export default function NavigateBtn({name}:{name:string}) {
+  return <SvgButton>{name}</SvgButton>;
 }

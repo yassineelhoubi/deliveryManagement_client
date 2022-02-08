@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import { FC, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CreateBtn from '../../layouts/buttons/CreateBtn';
+import NavigateBtn from '../../layouts/buttons/NavigateBtn';
 import TableData from '../../layouts/TableData'
 import useFetch from '../../Redux/services/utils/useFetch'
 interface Column {
@@ -27,9 +27,9 @@ const ReadManagers: FC = () => {
     { id: 'actions', label: 'actions' },
   ]
   return <div>
-    <div className="mb-6" onClick={() => redirect()}>
+    <div className="mb-6 w-min" onClick={() => redirect()}>
 
-      <CreateBtn />
+      <NavigateBtn name="Create" />
     </div>
     <Typography variant="h4" gutterBottom component="div">
       Managers
