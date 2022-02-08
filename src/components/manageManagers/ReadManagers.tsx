@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material';
 import { FC, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CreateBtn from '../../layouts/buttons/CreateBtn';
 import TableData from '../../layouts/TableData'
 import useFetch from '../../Redux/services/utils/useFetch'
@@ -10,11 +11,13 @@ interface Column {
 
 const ReadManagers: FC = () => {
 
+  let navigate = useNavigate();
 
-  const [data, setData] = useState([]);
+  const { data, error, isPending, setData: refetch } = useFetch("http://localhost:3000/api/admin/getAllManagers");
 
-  const { error, isPending } = useFetch("http://localhost:3000/api/admin/getAllManagers", setData);
-
+  function redirect(): void {
+    navigate("/dashboard/admin/manageManagers/create", { replace: true });
+  }
 
   const columns: Column[] = [
     { id: 'username', label: 'User Name' },
@@ -24,7 +27,7 @@ const ReadManagers: FC = () => {
     { id: 'actions', label: 'actions' },
   ]
   return <div>
-    <div className="mb-6" onClick={() => console.log('e')}>
+    <div className="mb-6" onClick={() => redirect()}>
 
       <CreateBtn />
     </div>
@@ -34,7 +37,7 @@ const ReadManagers: FC = () => {
 
     <div className="mt-6">
 
-      {data && <TableData data={data} columns={columns} />}
+      {data && <TableData data={data} columns={columns} refetch={refetch} belongsTo="managers"/>}
     </div>
   </div>;
 };

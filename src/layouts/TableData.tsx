@@ -32,12 +32,14 @@ interface data {
 }
 
 interface Props {
-  data: data[]
-  columns: Column[]
+  data: data[];
+  columns: Column[];
+  refetch: any;
+  belongsTo:string
 }
 
 
-const TableData: React.FC<Props> = ({ data, columns: headers }) => {
+const TableData: React.FC<Props> = ({ data, columns: headers, refetch , belongsTo}) => {
   // columns => table headers
   const columns: readonly Column[] = headers.map(e => e);
   // rows => data
@@ -54,13 +56,13 @@ const TableData: React.FC<Props> = ({ data, columns: headers }) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  
+
   // MODAL STATE
   const [open, setOpen] = useState(false)
   // GET MANAGER ID TO PASS IN DELETE MODAL
-  const [managerId , setManagerId] = useState('')
-  
-  const openDeleteModal = (id:string) =>{
+  const [userId, setManagerId] = useState('')
+
+  const openDeleteModal = (id: string) => {
     console.log(id)
     setManagerId(id)
     setOpen(!open)
@@ -93,10 +95,10 @@ const TableData: React.FC<Props> = ({ data, columns: headers }) => {
                         <TableCell key={column.id}   >
                           {column.id == "actions" ?
                             <>
-                              <Button onClick={()=>openDeleteModal(row._id)} variant="outlined" >
+                              <Button onClick={() => openDeleteModal(row._id)} variant="outlined" >
                                 <DeleteIcon />
                               </Button>
-                              <Button  variant="outlined" >
+                              <Button variant="outlined" >
                                 <EditIcon />
                               </Button>
                             </> : value}
@@ -119,8 +121,8 @@ const TableData: React.FC<Props> = ({ data, columns: headers }) => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper >
-    {  <DeleteUserDialog setOpen={setOpen} open={open} managerId={managerId} />}
-    </>
+    {<DeleteUserDialog setOpen={setOpen} open={open} userId={userId} refetch={refetch} belongsTo={belongsTo}/>}
+  </>
   );
 };
 

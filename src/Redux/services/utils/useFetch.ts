@@ -2,27 +2,28 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 
-const useFetch = (url : string, setData:Function) => {
+const useFetch = (url: string) => {
 
-    const [isPending, setIsPending] = useState(true)
-    const [error, setError] = useState(null)
+  const [data, setData] = useState([])
+  const [isPending, setIsPending] = useState(true)
+  const [error, setError] = useState(null)
 
 
-    useEffect(()=> {
+  useEffect(() => {
 
-      axios.get(url)
-      .then( (res) =>{
+    axios.get(url)
+      .then((res) => {
         setData(res.data.message)
         setIsPending(false)
       })
-      .catch((err) =>{
+      .catch((err) => {
         setError(err)
       })
-    
-    },[url])
 
-    return { error , isPending }
-    
+  }, [url])
+
+  return { error, isPending, data, setData }
+
 };
 
 export default useFetch;
