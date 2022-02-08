@@ -5,13 +5,12 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useFormik } from "formik"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { RootState } from "../../Redux/store";
 import * as Yup from "yup"
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavigateBtn from '../../layouts/buttons/NavigateBtn';
-// import navigateBtn from '../../layouts/buttons/navigateBtn';
 
 
 const theme = createTheme();
@@ -24,7 +23,6 @@ const CreateManager: React.FC = () => {
 
   let navigate = useNavigate();
 
-  let dispatch = useDispatch()
 
   // ! GET TOKEN FROM STORE
   let token = useSelector((state: RootState) => state.user.token);
@@ -36,7 +34,7 @@ const CreateManager: React.FC = () => {
       password: ''
     },
     validationSchema: Yup.object({
-      username: Yup.string().min(8, 'username must be more than 5 characters').required('Required'),
+      username: Yup.string().min(5, 'username must be more than 5 characters').required('Required'),
       email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string().min(5, 'Must be 5 characters or more').required('Required'),
     }),
@@ -83,22 +81,23 @@ const CreateManager: React.FC = () => {
               margin="normal"
               required
               fullWidth
-              id="username"
-              label="username"
-              {...formik.getFieldProps('username')}
+              id="email"
+              label="Email Address"
+              type="email"
+              {...formik.getFieldProps('email')}
               autoFocus
-              autoComplete="off"
             />
-            {formik.touched.username && formik.errors.username ? <div className="text-red-400 ">{formik.errors.username}</div> : null}
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              {...formik.getFieldProps('email')}
-              autoFocus
+              id="username"
+              label="username"
+              type="text"
+              {...formik.getFieldProps('username')}
+              
             />
+            {formik.touched.username && formik.errors.username ? <div className="text-red-400 ">{formik.errors.username}</div> : null}
             {formik.touched.email && formik.errors.email ? <div className="text-red-400 ">{formik.errors.email}</div> : null}
             <TextField
               margin="normal"
