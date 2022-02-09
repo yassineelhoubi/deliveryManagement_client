@@ -13,6 +13,9 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteUserDialog from './dialogs/DeleteUserDialog';
+import AlertUpdateDialog from './dialogs/UpdateUserDialog';
+import { setData } from '../Redux/features/manageUsersSlice';
+import { useDispatch } from 'react-redux';
 
 
 
@@ -35,11 +38,12 @@ interface Props {
   data: data[];
   columns: Column[];
   refetch: any;
-  belongsTo:string
+  belongsTo: string
 }
 
 
-const TableData: React.FC<Props> = ({ data, columns: headers, refetch , belongsTo}) => {
+const TableData: React.FC<Props> = ({ data, columns: headers, refetch, belongsTo }) => {
+  let dispatch = useDispatch()
   // columns => table headers
   const columns: readonly Column[] = headers.map(e => e);
   // rows => data
@@ -59,6 +63,7 @@ const TableData: React.FC<Props> = ({ data, columns: headers, refetch , belongsT
 
   // MODAL STATE
   const [open, setOpen] = useState(false)
+  const [openUpdateModal, setOpenUpdateModal] = useState(false)
   // GET MANAGER ID TO PASS IN DELETE MODAL
   const [userId, setManagerId] = useState('')
 
@@ -66,6 +71,12 @@ const TableData: React.FC<Props> = ({ data, columns: headers, refetch , belongsT
     console.log(id)
     setManagerId(id)
     setOpen(!open)
+  }
+  const handelAlertUpdateDialog = (id: string) => {
+    // setManagerId(id)
+    setOpenUpdateModal(!open)
+    console.log("kjn")
+    dispatch(setData({ value: { id: id } }))
   }
 
   return (<>
@@ -98,7 +109,7 @@ const TableData: React.FC<Props> = ({ data, columns: headers, refetch , belongsT
                               <Button onClick={() => openDeleteModal(row._id)} variant="outlined" >
                                 <DeleteIcon />
                               </Button>
-                              <Button variant="outlined" >
+                              <Button onClick={() => handelAlertUpdateDialog(row._id)} variant="outlined" >
                                 <EditIcon />
                               </Button>
                             </> : value}
@@ -121,7 +132,8 @@ const TableData: React.FC<Props> = ({ data, columns: headers, refetch , belongsT
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper >
-    {<DeleteUserDialog setOpen={setOpen} open={open} userId={userId} refetch={refetch} belongsTo={belongsTo}/>}
+    {<DeleteUserDialog setOpen={setOpen} open={open} userId={userId} refetch={refetch} belongsTo={belongsTo} />}
+    {<AlertUpdateDialog setOpen={setOpenUpdateModal} open={openUpdateModal}  refetch={refetch} belongsTo={belongsTo} />}
   </>
   );
 };
