@@ -87,6 +87,7 @@ const CreateManager: React.FC = () => {
               {...formik.getFieldProps('email')}
               autoFocus
             />
+            {formik.touched.email && formik.errors.email ? <div className="text-red-400 ">{formik.errors.email}</div> : null}
             <TextField
               margin="normal"
               required
@@ -95,10 +96,9 @@ const CreateManager: React.FC = () => {
               label="username"
               type="text"
               {...formik.getFieldProps('username')}
-              
+
             />
             {formik.touched.username && formik.errors.username ? <div className="text-red-400 ">{formik.errors.username}</div> : null}
-            {formik.touched.email && formik.errors.email ? <div className="text-red-400 ">{formik.errors.email}</div> : null}
             <TextField
               margin="normal"
               required
