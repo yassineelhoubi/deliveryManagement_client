@@ -9,6 +9,10 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../Redux/store';
+import useFetch from '../../Redux/services/utils/useFetch';
+import { useEffect } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from "yup"
 interface props {
   setOpen: (val: boolean) => void,
   open: boolean,
@@ -19,10 +23,40 @@ interface props {
 
 const AlertUpdateDialog: React.FC<props> = ({ setOpen, open, refetch, belongsTo }) => {
 
+  let data = useSelector((state: RootState) => state.manageUsers.value)
+
+
   // ! GET TOKEN FROM STORE
   let token = useSelector((state: RootState) => state.user.token);
-  let userId = useSelector((state: RootState) => state.manageUsers.value.id)
 
+  const formik = useFormik({
+    initialValues: {
+      username: data.username,
+      email: data.email,
+    },
+    validationSchema: Yup.object({
+      username: Yup.string().min(5, 'username must be more than 5 characters').required('Required'),
+      email: Yup.string().email('Invalid email address').required('Required'),
+    }),
+    enableReinitialize: true,
+    onSubmit: (values: any) => {
+      console.log(values)
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+
+      let url = "";
+      if (belongsTo == "managers") {
+        url = `http://localhost:3000/api/admin/updateManager/${data._id}`
+      }
+      axios.patch(url, values, config)
+        .then(res => {
+          setOpen(!open)
+        }).catch((err) => {
+          setError(err)
+        })
+    }
+  })
 
   return (
     <div>
@@ -39,7 +73,7 @@ const AlertUpdateDialog: React.FC<props> = ({ setOpen, open, refetch, belongsTo 
 
           <Box
             component="form"
-
+            onSubmit={formik.handleSubmit}
             sx={{
               marginTop: 8,
               display: 'flex',
@@ -54,16 +88,18 @@ const AlertUpdateDialog: React.FC<props> = ({ setOpen, open, refetch, belongsTo 
               required
               fullWidth
               id="outlined-required"
-              label="Required"
-              defaultValue="Hello World"
+              label="Email"
+              {...formik.getFieldProps('email')}
             />
+            {formik.touched.email && formik.errors.email ? <div className="text-red-400 ">{formik.errors.email}</div> : null}
             <TextField
               required
               fullWidth
               id="outlined-required"
-              label="Required"
-              defaultValue="Hello World"
+              label="UserName"
+              {...formik.getFieldProps('username')}
             />
+            {formik.touched.username && formik.errors.username ? <div className="text-red-400 ">{formik.errors.username}</div> : null}
 
             <Button
               type="submit"
@@ -78,9 +114,7 @@ const AlertUpdateDialog: React.FC<props> = ({ setOpen, open, refetch, belongsTo 
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(!open)}>Disagree</Button>
-          <Button onClick={() => { console.log("update") }} autoFocus>
-            Agree
-          </Button>
+
         </DialogActions>
       </Dialog>
     </div>

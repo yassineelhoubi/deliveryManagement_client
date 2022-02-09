@@ -16,6 +16,7 @@ import DeleteUserDialog from './dialogs/DeleteUserDialog';
 import AlertUpdateDialog from './dialogs/UpdateUserDialog';
 import { setData } from '../Redux/features/manageUsersSlice';
 import { useDispatch } from 'react-redux';
+import useFetch from '../Redux/services/utils/useFetch';
 
 
 
@@ -72,11 +73,12 @@ const TableData: React.FC<Props> = ({ data, columns: headers, refetch, belongsTo
     setManagerId(id)
     setOpen(!open)
   }
-  const handelAlertUpdateDialog = (id: string) => {
+
+  const handelAlertUpdateDialog = (data: data) => {
     // setManagerId(id)
+    dispatch(setData({ value: data}))
     setOpenUpdateModal(!open)
-    console.log("kjn")
-    dispatch(setData({ value: { id: id } }))
+    // console.log("kjn",id)
   }
 
   return (<>
@@ -109,7 +111,7 @@ const TableData: React.FC<Props> = ({ data, columns: headers, refetch, belongsTo
                               <Button onClick={() => openDeleteModal(row._id)} variant="outlined" >
                                 <DeleteIcon />
                               </Button>
-                              <Button onClick={() => handelAlertUpdateDialog(row._id)} variant="outlined" >
+                              <Button onClick={() => handelAlertUpdateDialog(row)} variant="outlined" >
                                 <EditIcon />
                               </Button>
                             </> : value}
@@ -133,7 +135,7 @@ const TableData: React.FC<Props> = ({ data, columns: headers, refetch, belongsTo
       />
     </Paper >
     {<DeleteUserDialog setOpen={setOpen} open={open} userId={userId} refetch={refetch} belongsTo={belongsTo} />}
-    {<AlertUpdateDialog setOpen={setOpenUpdateModal} open={openUpdateModal}  refetch={refetch} belongsTo={belongsTo} />}
+    {openUpdateModal ?<AlertUpdateDialog setOpen={setOpenUpdateModal} open={openUpdateModal}  refetch={refetch} belongsTo={belongsTo} />:null}
   </>
   );
 };
